@@ -1,5 +1,5 @@
 import numpy as np
-from Task1.task1_initialization import Initialization
+from task1_initialization import Initialization
 MIN_DEV = 0.0001 #picked at random, do research into what is best.
 ROTATION_MUTATION = np.radians(5)
 STANDARD_DEVIATION = 0.01 #picked at random
@@ -98,21 +98,22 @@ class Mutation:
 
         return new_pop, new_dev, new_rot
 
-m = Mutation()
-i = Initialization()
+if __name__ == "__main__":
+    m = Mutation()
+    i = Initialization()
 
-size = 10
-rot_size = int((size*(size-1))/2)
-pop = i.uniform_initialization(size, size)
-dev = np.random.uniform(0, 0.0001, (size, size))
-rot = np.random.uniform(-np.pi, np.pi, (size, rot_size))
+    size = 10
+    rot_size = int((size*(size-1))/2)
+    pop = i.uniform_initialization(size, size)
+    dev = np.random.uniform(0, 0.0001, (size, size))
+    rot = np.random.uniform(-np.pi, np.pi, (size, rot_size))
 
-for i in range(3):
-    print(pop)
-    print(dev)
-    print(rot)
-    print()
-    pop, dev, rot = m.correlated_mutation(pop, dev, rot)
-    print(pop)
-    print(dev)
-    print(rot)
+    for i in range(3):
+        print(pop)
+        print(dev)
+        print(rot)
+        print()
+        pop, dev, rot = m.correlated_mutation(pop, dev, rot)
+        print(pop)
+        print(dev)
+        print(rot)

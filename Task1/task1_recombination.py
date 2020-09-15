@@ -1,7 +1,8 @@
 import numpy as np
 import itertools
 
-class recombination:
+class Recombination:
+
 
     """Choose pairs of parents to create offspring until the population is filled.
        To create children, choose a cut-off point and use the first parent to the left,
@@ -19,7 +20,6 @@ class recombination:
             return None
 
         for i in range(0, npop, 2):
-            print(i)
             index = np.random.choice(nums)
             nums.remove(index)
             donor1 = parents[pairs[index][0]]
@@ -37,7 +37,6 @@ class recombination:
                     child1.append(donor2[j])
                     child2.append(donor1[j])
 
-            print(child1)
             next_gen[i] = child1
             if i + 1 < npop:
                 next_gen[i + 1] = child2
@@ -82,11 +81,11 @@ class recombination:
                 next_gen[i + 1] = child2
         return next_gen
 
-
-NVAR = 4
-NPOP = 4
-parent_array = np.random.uniform(0, 1, (NPOP, NVAR))
-print(parent_array)
-recon = recombination()
-new_gen = recon.blend(parent_array, 6)
-print(new_gen)
+if __name__ == "__main__":
+    NVAR = 4
+    NPOP = 4
+    parent_array = np.random.uniform(0, 1, (NPOP, NVAR))
+    print(parent_array)
+    recon = Recombination()
+    new_gen = recon.blend(parent_array, 6)
+    print(new_gen)
