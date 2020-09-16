@@ -15,13 +15,9 @@ class Recombination:
         next_gen = np.zeros([npop, nvar])
         nums = [i for i in range(len(parents))]
         pairs = [pair for pair in itertools.combinations(nums, 2)]
-        if len(pairs) < npop:
-            print("Not enough pairs for a full generation, exiting")
-            return None
 
         for i in range(0, npop, 2):
-            index = np.random.choice(nums)
-            nums.remove(index)
+            index = np.random.choice(nums[:-1])
             donor1 = parents[pairs[index][0]]
             donor2 = parents[pairs[index][1]]
 
@@ -54,13 +50,9 @@ class Recombination:
         next_gen = np.zeros([npop, nvar])
         nums = [i for i in range(len(parents))]
         pairs = [pair for pair in itertools.combinations(nums, 2)]
-        if len(pairs) < npop:
-            print("Not enough pairs for a full generation, exiting")
-            return None
 
         for i in range(0, npop, 2):
-            index = np.random.choice(nums)
-            nums.remove(index)
+            index = np.random.choice(nums[:-1])
 
             donor1 = parents[pairs[index][0]]
             donor2 = parents[pairs[index][1]]
