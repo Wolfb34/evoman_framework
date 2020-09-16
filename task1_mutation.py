@@ -1,6 +1,6 @@
 import numpy as np
 from task1_initialization import Initialization
-
+from task1_constants import *
 
 
 class Mutation:
@@ -101,7 +101,7 @@ class Mutation:
         return new_pop, new_dev, new_rot
 
 if __name__ == "__main__":
-    m = Mutation()
+    m = Mutation(MIN_DEV, ROTATION_MUTATION, STANDARD_DEVIATION, DOM_L, DOM_U)
     i = Initialization()
 
     size = 10

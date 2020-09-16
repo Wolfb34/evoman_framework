@@ -25,7 +25,7 @@ if not os.path.exists(experiment_name):
 env = Environment(level=2,
                   player_controller=player_controller(N_HIDDEN_NEURONS),
                   speed="fastest")
-init = Initialization()
+init = Initialization(DOM_L, DOM_U)
 evaluator = Evaluation(env)
 selector = Selection()
 recombinator = Recombination()
