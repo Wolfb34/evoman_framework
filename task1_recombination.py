@@ -72,7 +72,7 @@ class Recombination:
             alpha = np.random.uniform(0, 1)
 
             low = [minarray[i] - alpha * diff[i] for i in range(nvar)]
-            high = [minarray[i] + alpha * diff[i] for i in range(nvar)]
+            high = [maxarray[i] + alpha * diff[i] for i in range(nvar)]
 
             child1 = np.random.uniform(low, high)
             next_gen[i] = child1
