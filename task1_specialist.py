@@ -5,29 +5,39 @@
 ################################
 
 import os
+import sys
+sys.path.insert(0, 'evoman')
 from task1_selection import Selection
 from task1_mutation import Mutation
 from task1_recombination import Recombination
 from task1_initialization import Initialization
 from task1_evaluation import Evaluation
+from demo_controller import player_controller
+from environment import Environment
 
 experiment_name = 'task1_specialist'
 if not os.path.exists(experiment_name):
     os.makedirs(experiment_name)
 
 N_HIDDEN_NEURONS = 10
-NPOP = 10
-NGEN = 5
+NPOP = 15
+NGEN = 10
 
+env = Environment(level=2,
+                  player_controller=player_controller(N_HIDDEN_NEURONS),
+                  speed="fastest")
 init = Initialization()
-evaluator = Evaluation()
+evaluator = Evaluation(env)
 selector = Selection()
 recombinator = Recombination()
 mutator = Mutation()
 
-population = init.uniform_initialization(NPOP, N_HIDDEN_NEURONS)
-print(population)
+n_vars = (env.get_num_sensors() + 1) * N_HIDDEN_NEURONS + (N_HIDDEN_NEURONS + 1) * 5
+
+
+population = init.uniform_initialization(NPOP, n_vars)
 for i in range(NGEN):
+    print(i)
     fitness_list = evaluator.simple_eval(population)
     parents = selector.select_best_percentage(population, fitness_list)
     population = recombinator.simple(parents, NPOP)
