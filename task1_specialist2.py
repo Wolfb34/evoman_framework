@@ -12,6 +12,7 @@ from task1_mutation import Mutation
 from task1_recombination import Recombination
 from task1_initialization import Initialization
 from task1_evaluation import Evaluation
+from demo_controller import player_controller
 from environment import Environment
 from task1_constants import *
 
@@ -21,11 +22,9 @@ experiment_name = 'task1_specialist2'
 if not os.path.exists(experiment_name):
     os.makedirs(experiment_name)
 
-env = Environment(experiment_name=experiment_name,
-				  playermode="ai",
-			  	  speed="fastest",
-				  enemymode="static",
-				  level=2)
+env = Environment(level=2,
+                  player_controller=player_controller(N_HIDDEN_NEURONS),
+                  speed="fastest")
 
 
 n_vars = (env.get_num_sensors() + 1) * N_HIDDEN_NEURONS + (N_HIDDEN_NEURONS + 1) * 5
