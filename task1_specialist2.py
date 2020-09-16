@@ -40,9 +40,6 @@ selector = Selection()
 recombinator = Recombination()
 mutator = Mutation(MIN_DEV, ROTATION_MUTATION, STANDARD_DEVIATION, DOM_L, DOM_U)
 
-
-n_vars = (env.get_num_sensors() + 1) * N_HIDDEN_NEURONS + (N_HIDDEN_NEURONS + 1) * 5
-
 '''
 Changes with regards to specialist1:
 
