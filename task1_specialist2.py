@@ -29,7 +29,7 @@ env = Environment(level=2,
 
 n_vars = (env.get_num_sensors() + 1) * N_HIDDEN_NEURONS + (N_HIDDEN_NEURONS + 1) * 5
 rot_size = int((n_vars * (n_vars - 1)) / 2)
-dev = np.random.uniform(0, 0.01, (NPOP, n_vars))
+dev = np.random.uniform(0, INIT_SD, (NPOP, n_vars))
 rot = np.random.uniform(-np.pi, np.pi, (NPOP, rot_size))
 
 
@@ -57,5 +57,5 @@ for i in range(NGEN):
 
     population = recombinator.blend(parents, NPOP)
 
-    population, dev, rot = mutator.correlated_mutation(population, dev, rot)
-    #population, dev = mutator.uncorrelated_mutation_n_step_size(population, dev)
+    #population, dev, rot = mutator.correlated_mutation(population, dev, rot)
+    population, dev = mutator.uncorrelated_mutation_n_step_size(population, dev)
