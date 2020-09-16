@@ -1,23 +1,17 @@
 import numpy as np
-import sys
-sys.path.insert(0, 'evoman')
-from environment import Environment
-from demo_controller import player_controller
-
-N_HIDDEN_NEURONS = 10
 
 
 class Evaluation:
+    def __init__(self, env):
+        self.env = env
 
     #makes use of the fitness function without any changes
     def simple_eval(self, pop):
-        env = Environment(level=2,
-                          player_controller=player_controller(N_HIDDEN_NEURONS),
-                          speed="fastest")
-        fitness_results = np.empty(pop.shape[0])
-
-        for i in pop:
-            fitness, player_life, enemy_life, game_run_time = env.play(pcont=i)
+        length = pop.shape[0]
+        fitness_results = np.empty(length)
+        for i in range(length):
+            print("evaluating: ", i)
+            fitness, player_life, enemy_life, game_run_time = self.env.play(pcont=pop[i])
             fitness_results[i] = fitness
 
         return fitness_results
