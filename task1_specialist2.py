@@ -28,8 +28,9 @@ env = Environment(experiment_name=experiment_name,
 				  level=2)
 
 
-rot_size = int((NPOP * (NPOP - 1)) / 2)
-dev = np.random.uniform(0, 0.01, (NPOP, NPOP))
+n_vars = (env.get_num_sensors() + 1) * N_HIDDEN_NEURONS + (N_HIDDEN_NEURONS + 1) * 5
+rot_size = int((n_vars * (n_vars - 1)) / 2)
+dev = np.random.uniform(0, 0.01, (NPOP, n_vars))
 rot = np.random.uniform(-np.pi, np.pi, (NPOP, rot_size))
 
 
@@ -40,6 +41,8 @@ recombinator = Recombination()
 mutator = Mutation(MIN_DEV, ROTATION_MUTATION, STANDARD_DEVIATION, DOM_L, DOM_U)
 
 
+n_vars = (env.get_num_sensors() + 1) * N_HIDDEN_NEURONS + (N_HIDDEN_NEURONS + 1) * 5
+
 '''
 Changes with regards to specialist1:
 
@@ -49,7 +52,7 @@ Changes with regards to specialist1:
 
 '''
 
-population = init.uniform_initialization(NPOP, N_HIDDEN_NEURONS)
+population = init.uniform_initialization(NPOP, n_vars)
 print(population)
 for i in range(NGEN):
     print("EVALUATION GENERATION %d\n" %i)
