@@ -8,3 +8,5 @@ ROTATION_MUTATION = np.radians(5)
 STANDARD_DEVIATION = 0.04 #picked at random
 DOM_L = -1
 DOM_U = 1 
+
+INIT_SD = 0.0001
