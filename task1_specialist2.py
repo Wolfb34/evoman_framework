@@ -29,11 +29,11 @@ env = Environment(experiment_name=experiment_name,
 
 
 rot_size = int((NPOP * (NPOP - 1)) / 2)
-dev = np.random.uniform(0, 0.0001, (NPOP, NPOP))
+dev = np.random.uniform(0, 0.01, (NPOP, NPOP))
 rot = np.random.uniform(-np.pi, np.pi, (NPOP, rot_size))
 
 
-init = Initialization()
+init = Initialization(DOM_L, DOM_U)
 evaluator = Evaluation(env)
 selector = Selection()
 recombinator = Recombination()
@@ -58,4 +58,5 @@ for i in range(NGEN):
 
     population = recombinator.blend(parents, NPOP)
 
-    population, dev, rot = mutator.correlated_mutation(population, dev, rot)     # change to uncorrelated if this does not work.
+    population, dev, rot = mutator.correlated_mutation(population, dev, rot)
+    #population, dev = mutator.uncorrelated_mutation_n_step_size(population, dev)
