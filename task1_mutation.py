@@ -1,13 +1,15 @@
 import numpy as np
 from task1_initialization import Initialization
-MIN_DEV = 0.0001 #picked at random, do research into what is best.
-ROTATION_MUTATION = np.radians(5)
-STANDARD_DEVIATION = 0.01 #picked at random
-DOM_L = -1 #duplicate constant in initialization
-DOM_U = 1 #duplicate constant in initialization
+
 
 
 class Mutation:
+    def __init__(self, min_dev, rotation, stdev, dom_l, dom_u):
+        self.min_dev = min_dev # picked at random, do research into what is best.
+        self.rotation = rotation
+        self.stdev = stdev # picked at random
+        self.dom_l = dom_l # duplicate constant in initialization
+        self.dom_u = dom_u # duplicate constant in initialization
 
     #applies mutation to every gene by some amount drawn from a normal distribution
     def nonuniform_mutation(self, pop):
@@ -17,9 +19,9 @@ class Mutation:
 
         for i in range(n_pop):
             for j in range(n_vars):
-                mutation_amount = np.random.normal(scale=STANDARD_DEVIATION)
+                mutation_amount = np.random.normal(scale=self.stdev)
                 gene = pop[i, j]
-                new_gene = np.clip(gene + mutation_amount, DOM_L, DOM_U)
+                new_gene = np.clip(gene + mutation_amount, self.dom_l, self.dom_u)
                 new_pop[i, j] = new_gene
 
         return new_pop
@@ -39,12 +41,12 @@ class Mutation:
             for j in range(n_vars):
                 gene_mutation = np.random.normal(scale=tau)
                 new_dev[i, j] = dev[i, j] * (np.e**(individual_mutation + gene_mutation))
-                if new_dev[i, j] < MIN_DEV:
-                    new_dev[i, j] = MIN_DEV
+                if new_dev[i, j] < self.min_dev:
+                    new_dev[i, j] = self.min_dev
 
                 mutation_amount = np.random.normal(scale=new_dev[i, j])
                 gene = pop[i, j]
-                new_gene = np.clip(gene + mutation_amount, DOM_L, DOM_U)
+                new_gene = np.clip(gene + mutation_amount, self.dom_l, self.dom_u)
                 new_pop[i, j] = new_gene
 
         return new_pop, new_dev
@@ -65,7 +67,7 @@ class Mutation:
 
             #mutate rotations
             for j in range(n_rot):
-                rotation_mutation_amount = np.random.normal(scale=ROTATION_MUTATION)
+                rotation_mutation_amount = np.random.normal(scale=self.rotation)
                 new_rot[i, j] = rot[i, j] + rotation_mutation_amount
                 if abs(new_rot[i, j]) > np.pi:
                     new_rot[i, j] = new_rot[i, j] - (2*np.pi*np.sign(new_rot[i, j]))
@@ -75,8 +77,8 @@ class Mutation:
             for j in range(n_vars):
                 gene_mutation = np.random.normal(scale=tau)
                 new_dev[i, j] = dev[i, j] * (np.e**(individual_mutation + gene_mutation))
-                if new_dev[i, j] < MIN_DEV:
-                    new_dev[i, j] = MIN_DEV
+                if new_dev[i, j] < self.min_dev:
+                    new_dev[i, j] = self.min_dev
 
             #create covariance matrix
             covariance_matrix = np.zeros((n_vars, n_vars))
@@ -94,7 +96,7 @@ class Mutation:
 
             zeros_array = np.zeros(n_vars)
             mutation_amounts = np.random.multivariate_normal(mean=zeros_array, cov=covariance_matrix)
-            new_pop[i] = np.clip(pop[i] + mutation_amounts, DOM_L, DOM_U)
+            new_pop[i] = np.clip(pop[i] + mutation_amounts, self.dom_l, self.dom_u)
 
         return new_pop, new_dev, new_rot
 
