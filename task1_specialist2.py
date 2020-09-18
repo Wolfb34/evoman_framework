@@ -9,12 +9,14 @@ import numpy as np
 sys.path.insert(0, 'evoman')
 from task1_selection import Selection
 from task1_mutation import Mutation
+from task1_logger import Logger
 from task1_recombination import Recombination
 from task1_initialization import Initialization
 from task1_evaluation import Evaluation
 from demo_controller import player_controller
 from environment import Environment
 from task1_constants import *
+
 
 
 
@@ -36,6 +38,7 @@ rot = np.random.uniform(-np.pi, np.pi, (NPOP, rot_size))
 init = Initialization(DOM_L, DOM_U)
 evaluator = Evaluation(env)
 selector = Selection()
+logger = Logger(experiment_name)
 recombinator = Recombination()
 mutator = Mutation(MIN_DEV, ROTATION_MUTATION, STANDARD_DEVIATION, DOM_L, DOM_U)
 
@@ -53,9 +56,11 @@ print(population)
 for i in range(NGEN):
     print("EVALUATION GENERATION %d\n" %i)
     fitness_list = evaluator.simple_eval(population)
+    logger.log_results(fitness_list)
+
     parents = selector.tournament_percentage(population, fitness_list)
 
     population = recombinator.blend(parents, NPOP)
 
-    #population, dev, rot = mutator.correlated_mutation(population, dev, rot)
-    population, dev = mutator.uncorrelated_mutation_n_step_size(population, dev)
+    population, dev, rot = mutator.correlated_mutation(population, dev, rot)
+    #population, dev = mutator.uncorrelated_mutation_n_step_size(population, dev)
