@@ -26,6 +26,7 @@ if not os.path.exists(experiment_name):
 
 env = Environment(level=2,
                   player_controller=player_controller(N_HIDDEN_NEURONS),
+                  enemy=ENEMY,
                   speed="fastest")
 
 
@@ -52,15 +53,32 @@ Changes with regards to specialist1:
 '''
 
 population = init.uniform_initialization(NPOP, n_vars)
+fitness_list = []
 print(population)
-for i in range(NGEN):
+for i in range(1,NGEN+1):
     print("EVALUATION GENERATION %d\n" %i)
     fitness_list = evaluator.simple_eval(population)
     logger.log_results(fitness_list)
 
-    parents = selector.tournament_percentage(population, fitness_list)
+    if i != NGEN:
+        parents = selector.tournament_percentage(population, fitness_list)
+        population = recombinator.blend(parents, NPOP)
+        population, dev, rot = mutator.correlated_mutation(population, dev, rot)
+        #population, dev = mutator.uncorrelated_mutation_n_step_size(population, dev)
 
-    population = recombinator.blend(parents, NPOP)
 
-    population, dev, rot = mutator.correlated_mutation(population, dev, rot)
-    #population, dev = mutator.uncorrelated_mutation_n_step_size(population, dev)
+
+# Select best from the last generation
+champion = selector.select_best_n(population,fitness_list, 1)
+individual_gain = []
+
+print("The champion is: %s" %champion)
+for run in range(5):
+    fitness_list = evaluator.simple_eval(champion)
+
+    fitness, player_life, enemy_life, game_run_time = env.play(pcont=champion)
+    individual_gain.append(player_life-enemy_life)
+
+average_ig = sum(individual_gain)/len(individual_gain)
+logger.log_individual(average_ig)
+
