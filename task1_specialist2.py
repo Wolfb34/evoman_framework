@@ -26,9 +26,8 @@ if not os.path.exists(experiment_name):
 
 env = Environment(level=2,
                   player_controller=player_controller(N_HIDDEN_NEURONS),
-                  enemy=ENEMY,
                   speed="fastest",
-                  enemies=[1])
+                  enemies=ENEMY)
 
 
 n_vars = (env.get_num_sensors() + 1) * N_HIDDEN_NEURONS + (N_HIDDEN_NEURONS + 1) * 5
