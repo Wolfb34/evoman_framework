@@ -20,9 +20,9 @@ class Logger:
 
     def log_results(self, fitness):
         file = open(self.log_file, "a")
-        file.write("%.{n}f,%.{n}f\n".format(n=SIGNIF) %(self.__avarage__(fitness), self.__max__(fitness)))
+        file.write("%.{n}f,%.{n}f\n".format(n=SIGNIF) %(self.__average__(fitness), self.__max__(fitness)))
 
-    def __avarage__(self, np_array):
+    def __average__(self, np_array):
         return np_array.mean()
 
     def __max__(self, np_array):
