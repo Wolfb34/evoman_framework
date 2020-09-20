@@ -15,6 +15,9 @@ class Recombination:
         next_gen = np.zeros([npop, nvar])
         nums = [i for i in range(len(parents))]
         pairs = [pair for pair in itertools.combinations(nums, 2)]
+        if len(nums) < 2:
+            print("Need at least 2 parents for recombination to be possible")
+            return None
 
         for i in range(0, npop, 2):
             index = np.random.choice(nums[:-1])
@@ -50,6 +53,9 @@ class Recombination:
         next_gen = np.zeros([npop, nvar])
         nums = [i for i in range(len(parents))]
         pairs = [pair for pair in itertools.combinations(nums, 2)]
+        if len(nums) < 2:
+            print("Need at least 2 parents for recombination to be possible")
+            return None
 
         for i in range(0, npop, 2):
             index = np.random.choice(nums[:-1])
