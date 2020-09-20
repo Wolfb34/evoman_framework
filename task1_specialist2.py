@@ -26,7 +26,7 @@ if not os.path.exists(experiment_name):
 
 env = Environment(level=2,
                   player_controller=player_controller(N_HIDDEN_NEURONS),
-                  enemy=ENEMY,
+                  enemies=ENEMY,
                   speed="fastest")
 
 
