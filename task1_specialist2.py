@@ -20,14 +20,15 @@ from task1_constants import *
 
 
 
-experiment_name = 'task1_specialist2'
+experiment_name = '(task2_specialist, enemy: {})'.format(ENEMY)
 if not os.path.exists(experiment_name):
     os.makedirs(experiment_name)
 
 env = Environment(level=2,
                   player_controller=player_controller(N_HIDDEN_NEURONS),
                   enemy=ENEMY,
-                  speed="fastest")
+                  speed="fastest",
+                  enemies=[1])
 
 
 n_vars = (env.get_num_sensors() + 1) * N_HIDDEN_NEURONS + (N_HIDDEN_NEURONS + 1) * 5
