@@ -18,7 +18,7 @@ from task1_logger import Logger
 from demo_controller import player_controller
 from environment import Environment
 
-experiment_name = '(task1_specialist, enemy: {})'.format(ENEMY)
+experiment_name = '(task1_specialist_enemy: {})'.format(ENEMY)
 if not os.path.exists(experiment_name):
     os.makedirs(experiment_name)
 
