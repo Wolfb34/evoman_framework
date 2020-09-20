@@ -72,7 +72,7 @@ individual_gain = []
 
 print("The champion is: %s" %champion)
 for run in range(5):
-    fitness_list = evaluator.simple_eval(champion)
+    fitness_list = evaluator.simple_eval(np.array(champion))
 
     fitness, player_life, enemy_life, game_run_time = env.play(pcont=champion)
     individual_gain.append(player_life-enemy_life)
