@@ -49,6 +49,6 @@ for i in range(NGEN):
 
 ig_list = []
 for i in range(5):
-    fitness, p_health, e_health, tim = env.play(pcont=best)
+    fitness, p_health, e_health, time = env.play(pcont=np.array(best[0]))
     ig_list.append(p_health - e_health)
-print(ig_list)
+logger.log_individual(np.average(ig_list))
