@@ -20,7 +20,7 @@ from task1_constants import *
 
 
 
-experiment_name = 'task1_specialist2'
+experiment_name = '(task2_specialist, enemy: {})'.format(ENEMY)
 if not os.path.exists(experiment_name):
     os.makedirs(experiment_name)
 

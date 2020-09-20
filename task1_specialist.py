@@ -18,7 +18,7 @@ from task1_logger import Logger
 from demo_controller import player_controller
 from environment import Environment
 
-experiment_name = 'task1_specialist'
+experiment_name = '(task1_specialist, enemy: {})'.format(ENEMY)
 if not os.path.exists(experiment_name):
     os.makedirs(experiment_name)
 
@@ -49,6 +49,6 @@ for i in range(NGEN):
 
 ig_list = []
 for i in range(5):
-    fitness, p_health, e_health, tim = env.play(pcont=best)
+    fitness, p_health, e_health, time = env.play(pcont=np.array(best[0]))
     ig_list.append(p_health - e_health)
-print(ig_list)
+logger.log_individual(np.average(ig_list))
