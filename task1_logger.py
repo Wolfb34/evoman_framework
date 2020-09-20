@@ -10,7 +10,7 @@ class Logger:
         self.experiment_name = experiment_name
         self.log_file_avg = "Logs/Task1/{name:s}/log_avg.txt".format(name=self.experiment_name)
         self.log_file_max = "Logs/Task1/{name:s}/log_max.txt".format(name=self.experiment_name)
-
+        self.log_file_ind = "Logs/Task1/{name:s}/log_ind.txt".format(name=self.experiment_name)
 
         directory = "Logs/Task1/{name:s}".format(name=experiment_name)
         if not os.path.exists(directory):
@@ -28,6 +28,10 @@ class Logger:
 
         file_avg.write("%.{n}f, ".format(n=SIGNIF) % (self.__average__(fitness)))
         file_max.write("%.{n}f, ".format(n=SIGNIF) % (self.__max__(fitness)))
+
+    def log_individual(self, individual_gain):
+        file_ind = open(self.log_file_ind, "a")
+        file_ind.write("%.{n}f, ".format(n=SIGNIF) % individual_gain)
 
     def __average__(self, np_array):
         return np_array.mean()
