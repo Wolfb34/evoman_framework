@@ -72,9 +72,7 @@ individual_gain = []
 
 print("The champion is: %s" %champion)
 for run in range(5):
-    fitness_list = evaluator.simple_eval(np.array(champion))
-
-    fitness, player_life, enemy_life, game_run_time = env.play(pcont=champion)
+    fitness, player_life, enemy_life, game_run_time = env.play(pcont=np.array(champion[0]))
     individual_gain.append(player_life-enemy_life)
 
 average_ig = sum(individual_gain)/len(individual_gain)
