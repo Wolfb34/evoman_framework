@@ -18,7 +18,7 @@ from environment import Environment
 from task1_constants import *
 
 
-experiment_name = '(task1_specialist2_enemy{})'.format(ENEMY)
+experiment_name = 'task1_specialist2_enemy_{}'.format(ENEMY)
 if not os.path.exists(experiment_name):
     os.makedirs(experiment_name)
 
@@ -77,4 +77,3 @@ for run in range(5):
 
 average_ig = sum(individual_gain)/len(individual_gain)
 logger.log_individual(average_ig)
-
