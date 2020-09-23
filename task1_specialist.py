@@ -1,6 +1,7 @@
 import os
 import sys
 import numpy as np
+sys.path.insert(0, 'evoman')
 from task1_selection import Selection
 from task1_mutation import Mutation
 from task1_recombination import Recombination
@@ -9,7 +10,7 @@ from task1_evaluation import Evaluation
 from task1_constants import *
 from task1_logger import Logger
 from demo_controller import player_controller
-sys.path.insert(0, 'evoman')
+
 from environment import Environment
 
 experiment_name = 'task1_specialist1_enemy_{}'.format(ENEMY)
