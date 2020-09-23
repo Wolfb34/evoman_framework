@@ -1,13 +1,6 @@
-################################
-# EvoMan FrameWork - V1.0 2016 #
-# Author: Karine Miras         #
-# karine.smiras@gmail.com      #
-################################
-
 import os
 import sys
 import numpy as np
-sys.path.insert(0, 'evoman')
 from task1_selection import Selection
 from task1_mutation import Mutation
 from task1_recombination import Recombination
@@ -16,6 +9,7 @@ from task1_evaluation import Evaluation
 from task1_constants import *
 from task1_logger import Logger
 from demo_controller import player_controller
+sys.path.insert(0, 'evoman')
 from environment import Environment
 
 experiment_name = '(task1_specialist, enemy: {})'.format(ENEMY)
@@ -36,19 +30,24 @@ recombinator = Recombination()
 mutator = Mutation(MIN_DEV, ROTATION_MUTATION, STANDARD_DEVIATION, DOM_L, DOM_U)
 
 population = init.uniform_initialization(NPOP, N_VARS)
-
+best = None
 for i in range(NGEN):
     print(i)
     fitness_list = evaluator.simple_eval(population)
+    print(fitness_list)
     logger.log_results(fitness_list)
     parents = selector.select_best_percentage(population, fitness_list)
-    if i == NGEN - 1:
-        best = selector.select_best_n(population, fitness_list, 1)
+    ind = np.argmax(fitness_list)
+    if best is None:
+        best = (fitness_list[ind], population[ind])
+    elif fitness_list[ind] > best[0]:
+        best = (fitness_list[ind], population[ind])
+    print(best)
     population = recombinator.simple(parents, NPOP)
     population = mutator.nonuniform_mutation(population)
 
 ig_list = []
 for i in range(5):
-    fitness, p_health, e_health, time = env.play(pcont=np.array(best[0]))
+    fitness, p_health, e_health, time = env.play(pcont=np.array(best[1]))
     ig_list.append(p_health - e_health)
 logger.log_individual(np.average(ig_list))
