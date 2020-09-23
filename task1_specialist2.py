@@ -22,7 +22,7 @@ experiment_name = 'task1_specialist2_enemy_{}'.format(ENEMY)
 if not os.path.exists(experiment_name):
     os.makedirs(experiment_name)
 
-env = Environment(level=2,
+env = Environment(experiment_name=experiment_name, level=2,
                   player_controller=player_controller(N_HIDDEN_NEURONS),
                   enemies=ENEMY,
                   speed="fastest")
