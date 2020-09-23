@@ -34,7 +34,6 @@ best = None
 for i in range(NGEN):
     print(i)
     fitness_list = evaluator.simple_eval(population)
-    print(fitness_list)
     logger.log_results(fitness_list)
     parents = selector.select_best_percentage(population, fitness_list)
     ind = np.argmax(fitness_list)
@@ -42,7 +41,6 @@ for i in range(NGEN):
         best = (fitness_list[ind], population[ind])
     elif fitness_list[ind] > best[0]:
         best = (fitness_list[ind], population[ind])
-    print(best)
     population = recombinator.simple(parents, NPOP)
     population = mutator.nonuniform_mutation(population)
 
