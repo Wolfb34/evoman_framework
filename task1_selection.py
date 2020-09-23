@@ -51,6 +51,12 @@ class Selection:
         if not self.__check_match__(population, fitness):
             return population
 
+        # Shuffle population
+        indici = numpy.random.permutation(len(population))
+        population = population[indici]
+        fitness = fitness[indici]
+
+        # perform battles
         tournament_size = len(population) / n
         parents = []
 
