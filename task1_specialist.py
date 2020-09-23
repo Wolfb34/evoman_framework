@@ -12,7 +12,7 @@ from demo_controller import player_controller
 sys.path.insert(0, 'evoman')
 from environment import Environment
 
-experiment_name = 'task1_specialist_enemy_{}'.format(ENEMY)
+experiment_name = 'task1_specialist1_enemy_{}'.format(ENEMY)
 if not os.path.exists(experiment_name):
     os.makedirs(experiment_name)
 
