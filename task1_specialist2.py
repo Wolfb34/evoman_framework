@@ -50,13 +50,30 @@ Changes with regards to specialist1:
 
 '''
 
+
+def store_best_champion(pop, fit, gen):
+    global best_individual, best_gen, highest_fitness
+    if fit.max() > highest_fitness:
+        best_individual = selector.select_best_n(pop,fit,1)
+        best_gen = gen
+        highest_fitness = fit.max()
+
+
+
 population = init.uniform_initialization(NPOP, n_vars)
 fitness_list = []
 print(population)
+
+best_gen = 0
+highest_fitness = -100000
+best_individual = None
+
 for i in range(1,NGEN+1):
     print("EVALUATION GENERATION %d\n" %i)
     fitness_list = evaluator.simple_eval(population)
     logger.log_results(fitness_list)
+
+    store_best_champion(population, fitness_list,i)
 
     if i != NGEN:
         parents = selector.tournament_percentage(population, fitness_list)
@@ -66,13 +83,13 @@ for i in range(1,NGEN+1):
 
 
 
-# Select best from the last generation
-champion = selector.select_best_n(population,fitness_list, 1)
-individual_gain = []
 
-print("The champion is: %s" %champion)
+# Run the best individual of all generations
+individual_gain = []
+print("The best fitness was in generation %d and had a fitness of %.3f" %(best_gen, highest_fitness))
+
 for run in range(5):
-    fitness, player_life, enemy_life, game_run_time = env.play(pcont=np.array(champion[0]))
+    fitness, player_life, enemy_life, game_run_time = env.play(pcont=np.array(best_individual[0]))
     individual_gain.append(player_life-enemy_life)
 
 average_ig = sum(individual_gain)/len(individual_gain)
