@@ -13,8 +13,9 @@ INIT_SD = 0.0001
 
 
 # ------TASK1
-ENEMY = [6]
+ENEMY = [2]
 
 # ------Task2
 GROUP1 = [1,2,3,4]
 GROUP2 = [5,6,7,8]
+SHARE_SIZE = 10
