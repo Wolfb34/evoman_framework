@@ -66,7 +66,7 @@ class Generalist1:
         for generation in range(1,NGEN+1):
             print("EVALUATION GENERATION %d\n" %generation)
 
-            fitness_list = self.evaluator.multiplemode_eval(population)
+            fitness_list = self.evaluator.simple_generalist_eval(population)
 
             '''Log fitness'''
             self.logger.log_results(fitness_list)
