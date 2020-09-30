@@ -48,7 +48,7 @@ class Generalist1:
     def __run_best_against_all__(self):
         self.env.update_parameter('enemies', range(1, 9))
         fitness, player_life, enemy_life, game_run_time = self.env.play(pcont=np.array(self.best_individual[0]))
-        return sum(player_life) - sum(enemy_life)
+        return np.sum(player_life) - np.sum(enemy_life)
 
     def store_best_champion(self, pop, fit, gen):
         if fit.max() > self.highest_fitness:
