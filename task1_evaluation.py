@@ -14,7 +14,7 @@ class Evaluation:
 
         return fitness_results
 
-    def multiplemode_eval(self, pop):
+    def simple_generalist_eval(self, pop):
         length = pop.shape[0]
         fitness_results = np.empty(length)
         for i in range(length):
