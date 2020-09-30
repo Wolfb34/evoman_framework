@@ -8,6 +8,13 @@ ROTATION_MUTATION = np.radians(5)
 STANDARD_DEVIATION = 0.32 #picked at random
 DOM_L = -1
 DOM_U = 1
-ENEMY = [6]
 
 INIT_SD = 0.0001
+
+
+# ------TASK1
+ENEMY = [6]
+
+# ------Task2
+GROUP1 = [1,2,3,4]
+GROUP2 = [5,6,7,8]
