@@ -29,6 +29,8 @@ class Generalist1:
 
         self.env = Environment(experiment_name=self.experiment_name, level=2,
                           player_controller=player_controller(N_HIDDEN_NEURONS),
+                          multiplemode="yes",
+                          enemies=enemies,
                           speed="fastest")
 
         self.n_vars = (self.env.get_num_sensors() + 1) * N_HIDDEN_NEURONS + (N_HIDDEN_NEURONS + 1) * 5
@@ -44,12 +46,9 @@ class Generalist1:
         self.mutator = Mutation(MIN_DEV, ROTATION_MUTATION, STANDARD_DEVIATION, DOM_L, DOM_U)
 
     def __run_best_against_all__(self):
-        gain = 0
-        for enemy in range(1, 9):
-            self.env.update_parameter('enemies', [enemy])
-            fitness, player_life, enemy_life, game_run_time = self.env.play(pcont=np.array(self.best_individual[0]))
-            gain += (player_life - enemy_life)
-        return gain
+        self.env.update_parameter('enemies', range(1, 9))
+        fitness, player_life, enemy_life, game_run_time = self.env.play(pcont=np.array(self.best_individual[0]))
+        return sum(player_life) - sum(enemy_life)
 
     def store_best_champion(self, pop, fit, gen):
         if fit.max() > self.highest_fitness:
@@ -59,7 +58,6 @@ class Generalist1:
 
     def run(self):
         population = self.init.uniform_initialization(NPOP, self.n_vars)
-        fitness_list = np.empty(NPOP)
 
         self.best_gen = 0
         self.highest_fitness = -100000
@@ -68,10 +66,7 @@ class Generalist1:
         for generation in range(1,NGEN+1):
             print("EVALUATION GENERATION %d\n" %generation)
 
-            '''Run against all enemies in the group'''
-            for enemy in self.enemies:
-                self.env.update_parameter('enemies', [enemy])
-                fitness_list = np.add(fitness_list, self.evaluator.simple_eval(population))
+            fitness_list = self.evaluator.simple_generalist_eval(population)
 
             '''Log fitness'''
             self.logger.log_results(fitness_list)
@@ -83,7 +78,6 @@ class Generalist1:
                 population = self.recombinator.blend(parents, NPOP)
                 #population, self.dev, self.rot = self.mutator.correlated_mutation(population, self.dev, self.rot)
                 population, self.dev = self.mutator.uncorrelated_mutation_n_step_size(population, self.dev)
-
 
         # Run the best individual of all generations
         print("The best fitness was in generation %d and had a fitness of %.3f" %(self.best_gen, self.highest_fitness))
