@@ -60,7 +60,7 @@ class Logger:
         for i in range(n_vars):
             mean_difference[i] = total_difference[i] / NPOP
 
-        estimated_hamming_diversity = round( 100 * np.mean(mean_difference), 2)
+        estimated_hamming_diversity = round( 100 * np.mean(mean_difference), 3)
 
         return estimated_hamming_diversity
 
