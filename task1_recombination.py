@@ -71,13 +71,25 @@ class Recombination:
 
             low = [minarray[i] - alpha * diff[i] for i in range(nvar)]
             high = [maxarray[i] + alpha * diff[i] for i in range(nvar)]
+            low = [self.__limit__(x) for x in low]
+            high = [self.__limit__(x) for x in high]
 
+            print(low)
+            print(high)
             child1 = np.random.uniform(low, high)
             next_gen[i] = child1
             if i + 1 < npop:
                 child2 = np.random.uniform(low, high)
                 next_gen[i + 1] = child2
+
         return next_gen
+
+    def __limit__(self, num):
+        if num < -1:
+            return -1
+        if num > 1:
+            return 1
+        return num
 
 if __name__ == "__main__":
     NVAR = 4

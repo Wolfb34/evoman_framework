@@ -14,7 +14,7 @@ class Evaluation:
             fitness_results[i] = fitness
 
         return fitness_results
-        
+
     def __share_of__(self, ind1, ind2):
         dist = np.linalg.norm(ind1 - ind2)
         if dist > self.share_size:
@@ -36,4 +36,14 @@ class Evaluation:
             fitness, player_life, enemy_life, game_run_time = self.env.play(pcont=pop[i])
             fitness_results[i] = np.sum(fitness)
 
+        return fitness_results
+
+    def sharing_generalist_eval(self, pop):
+        length = pop.shape[0]
+        fitness_results = np.empty(length)
+        for i in range(length):
+            fitness, player_life, enemy_life, game_run_time = self.env.play(pcont=pop[i])
+            fitness_results[i] = np.sum(fitness)
+        fitness_results = self.share_fitness(pop, fitness_results)
+        
         return fitness_results
