@@ -64,12 +64,12 @@ class Generalist1:
         self.best_individual = None
 
         for generation in range(1,NGEN+1):
-            print("EVALUATION GENERATION %d\n" %generation)
+            print("EVALUATION GENERATION %d OF %d \n" %(generation, NGEN))
 
             fitness_list = self.evaluator.simple_generalist_eval(population)
 
             '''Log fitness'''
-            self.logger.log_results(fitness_list)
+            self.logger.log_results(fitness_list, population)
             self.store_best_champion(population, fitness_list,generation)
 
             '''create next gen'''
