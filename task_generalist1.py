@@ -39,7 +39,7 @@ class Generalist1:
         self.rot = np.random.uniform(-np.pi, np.pi, (NPOP, self.rot_size))
 
         self.init = Initialization(DOM_L, DOM_U)
-        self.evaluator = Evaluation(self.env)
+        self.evaluator = Evaluation(self.env, SHARE_SIZE)
         self.selector = Selection()
         self.logger = Logger(self.experiment_name)
         self.recombinator = Recombination()
