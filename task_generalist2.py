@@ -18,7 +18,7 @@ from environment import Environment
 from task1_constants import *
 
 
-class Generalist1:
+class Generalist2:
 
     def __init__(self,  enemies):
         self.enemies = enemies
@@ -92,7 +92,7 @@ class Generalist1:
 
 
 
-group1 = Generalist1(GROUP1)
+group1 = Generalist2(GROUP1)
 group1.run()
-group2 = Generalist1(GROUP2)
+group2 = Generalist2(GROUP2)
 group2.run()
