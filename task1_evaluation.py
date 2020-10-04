@@ -1,17 +1,20 @@
 import numpy as np
 
 class Evaluation:
-    def __init__(self, env, share_size):
+    def __init__(self, env, enemies, share_size):
         self.env = env
+        self.enemies = enemies
         self.share_size = share_size
 
     #makes use of the fitness function without any changes
     def simple_eval(self, pop):
         length = pop.shape[0]
         fitness_results = np.empty(length)
-        for i in range(length):
-            fitness, player_life, enemy_life, game_run_time = self.env.play(pcont=pop[i])
-            fitness_results[i] = fitness
+        for enemy in self.enemies:
+            self.env.update_parameter('enemies', [enemy])
+            for i in range(length):
+                fitness, player_life, enemy_life, game_run_time = self.env.play(pcont=pop[i])
+                fitness_results[i] += fitness
 
         return fitness_results
 
