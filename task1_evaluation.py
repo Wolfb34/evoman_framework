@@ -11,7 +11,7 @@ class Evaluation:
         length = pop.shape[0]
         fitness_results = np.empty(length)
         for i in range(length):
-            fitness, player_life, enemy_life, game_run_time = self.env.play(pcont=pop[i])
+            fitness, _, _, _ = self.env.play(pcont=pop[i])
             fitness_results[i] = fitness
 
         return fitness_results
@@ -25,7 +25,7 @@ class Evaluation:
 
             for enemy in self.enemies:
                 self.env.update_parameter('enemies', [enemy])
-                fitness, player_life, enemy_life, game_run_time = self.env.play(pcont=pop[i])
+                fitness, _, _, _ = self.env.play(pcont=pop[i])
                 fitness_individual += fitness
 
             fitness_results[i] = np.sum(fitness_individual)
@@ -41,11 +41,9 @@ class Evaluation:
 
             for enemy in self.enemies:
                 self.env.update_parameter('enemies', [enemy])
-                fitness, player_life, enemy_life, game_run_time = self.env.play(pcont=pop[i])
+                fitness, _, _, _ = self.env.play(pcont=pop[i])
                 fitness_individual += fitness
 
             fitness_results[i] = np.sum(fitness_individual)
-
-        fitness_results = self.share_fitness(pop, fitness_results)
 
         return fitness_results
