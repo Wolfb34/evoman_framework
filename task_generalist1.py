@@ -39,16 +39,20 @@ class Generalist1:
         self.rot = np.random.uniform(-np.pi, np.pi, (NPOP, self.rot_size))
 
         self.init = Initialization(DOM_L, DOM_U)
-        self.evaluator = Evaluation(self.env, SHARE_SIZE)
+        self.evaluator = Evaluation(self.env, enemies, SHARE_SIZE)
         self.selector = Selection()
         self.logger = Logger(self.experiment_name)
         self.recombinator = Recombination()
         self.mutator = Mutation(MIN_DEV, ROTATION_MUTATION, STANDARD_DEVIATION, DOM_L, DOM_U)
 
     def __run_best_against_all__(self):
-        self.env.update_parameter('enemies', range(1, 9))
-        fitness, player_life, enemy_life, game_run_time = self.env.play(pcont=np.array(self.best_individual[0]))
-        return np.sum(player_life) - np.sum(enemy_life)
+        player_array, enemy_array = [], []
+        for i in range(1, 9):
+            self.env.update_parameter('enemies', [i])
+            fitness, player_life, enemy_life, game_run_time = self.env.play(pcont=np.array(self.best_individual[0]))
+            player_array.append(player_life)
+            enemy_array.append(enemy_life)
+        return sum(player_array) - sum(enemy_array)
 
     def store_best_champion(self, pop, fit, gen):
         if fit.max() > self.highest_fitness:
