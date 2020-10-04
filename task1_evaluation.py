@@ -33,6 +33,7 @@ class Evaluation:
         length = pop.shape[0]
         fitness_results = np.empty(length)
         for i in range(length):
+            print("\n INDIVIDUAL %d OF %d" %(i+1, length))
             fitness, player_life, enemy_life, game_run_time = self.env.play(pcont=pop[i])
             fitness_results[i] = np.sum(fitness)
 

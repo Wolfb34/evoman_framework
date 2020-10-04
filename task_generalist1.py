@@ -75,9 +75,16 @@ class Generalist1:
             '''create next gen'''
             if generation != NGEN:
                 parents = self.selector.tournament_percentage(population, fitness_list)
-                population = self.recombinator.blend(parents, NPOP)
-                #population, self.dev, self.rot = self.mutator.correlated_mutation(population, self.dev, self.rot)
-                population, self.dev = self.mutator.uncorrelated_mutation_n_step_size(population, self.dev)
+                survivors = self.selector.select_best_percentage(population, fitness_list, BEST_SURVIVOR_PERCENTAGE)
+
+                '''create children'''
+                children = self.recombinator.blend(parents, NPOP-len(survivors))
+
+                #children, self.dev, self.rot = self.mutator.correlated_mutation(children, self.dev, self.rot)
+                children, self.dev = self.mutator.uncorrelated_mutation_n_step_size(children, self.dev)
+
+                '''combine survivors and children'''
+                population = np.append(children, survivors, axis=0)
 
         # Run the best individual of all generations
         print("The best fitness was in generation %d and had a fitness of %.3f" %(self.best_gen, self.highest_fitness))
