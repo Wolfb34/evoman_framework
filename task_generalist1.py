@@ -84,7 +84,7 @@ class Generalist1:
                 children, self.dev = self.mutator.uncorrelated_mutation_n_step_size(children, self.dev)
 
                 '''combine survivors and children'''
-                population = np.append(children, survivors, axis=0)     # survivors = list, children = numpy
+                population = np.append(children, survivors, axis=0)
 
         # Run the best individual of all generations
         print("The best fitness was in generation %d and had a fitness of %.3f" %(self.best_gen, self.highest_fitness))
