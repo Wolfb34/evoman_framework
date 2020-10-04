@@ -29,8 +29,7 @@ class Generalist1:
 
         self.env = Environment(experiment_name=self.experiment_name, level=2,
                           player_controller=player_controller(N_HIDDEN_NEURONS),
-                          multiplemode="yes",
-                          enemies=enemies,
+                          enemies=[enemies[0]],
                           speed="fastest")
 
         self.n_vars = (self.env.get_num_sensors() + 1) * N_HIDDEN_NEURONS + (N_HIDDEN_NEURONS + 1) * 5
@@ -61,7 +60,7 @@ class Generalist1:
         player_array, enemy_array = [], []
         for i in range(1, 9):
             self.env.update_parameter('enemies', [i])
-            fitness, player_life, enemy_life, game_run_time = self.env.play(pcont=np.array(self.best_individual[0]))
+            _, player_life, enemy_life, _ = self.env.play(pcont=np.array(self.best_individual[0]))
             player_array.append(player_life)
             enemy_array.append(enemy_life)
         return sum(player_array) - sum(enemy_array)
@@ -106,7 +105,7 @@ class Generalist1:
         print("The best fitness was in generation %d and had a fitness of %.3f" %(self.best_gen, self.highest_fitness))
 
         individual_gain = []
-        for run in range(5):
+        for _ in range(5):
             individual_gain.append(self.__run_best_against_all__())
 
         average_ig = sum(individual_gain)/len(individual_gain)
