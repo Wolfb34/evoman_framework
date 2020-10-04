@@ -44,6 +44,5 @@ class Evaluation:
         for i in range(length):
             fitness, player_life, enemy_life, game_run_time = self.env.play(pcont=pop[i])
             fitness_results[i] = np.sum(fitness)
-        fitness_results = self.share_fitness(pop, fitness_results)
-        
+
         return fitness_results

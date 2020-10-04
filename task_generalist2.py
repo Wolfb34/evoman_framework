@@ -50,6 +50,20 @@ class Generalist2:
         fitness, player_life, enemy_life, game_run_time = self.env.play(pcont=np.array(self.best_individual[0]))
         return sum(player_life) - sum(enemy_life)
 
+    def __share_of__(self, ind1, ind2):
+        dist = np.linalg.norm(ind1 - ind2)
+        if dist > SHARE_SIZE:
+            return 0
+        return 1 - dist / SHARE_SIZE
+
+    def __share_fitness__(self, pop, fitness):
+        new_fitness = []
+        length = len(pop)
+        for i in range(length):
+            divisor = sum([self.__share_of__(pop[i], pop[j]) for j in range(length)])
+            new_fitness.append(fitness[i] / divisor)
+        return np.array(new_fitness)
+
     def store_best_champion(self, pop, fit, gen):
         if fit.max() > self.highest_fitness:
             self.best_individual = self.selector.select_best_n(pop,fit,1)
@@ -69,8 +83,15 @@ class Generalist2:
             fitness_list = self.evaluator.sharing_generalist_eval(population)
 
             '''Log fitness'''
-            self.logger.log_results(fitness_list)
-            self.store_best_champion(population, fitness_list,generation)
+            self.logger.log_results(fitness_list, population)
+            self.store_best_champion(population, fitness_list, generation)
+            min_fitness = np.amin(fitness_list)
+            print("Fitness before: " + str(fitness_list))
+            if min_fitness < 0:
+                fitness_list = [x - min_fitness for x in fitness_list]
+
+            fitness_list = self.__share_fitness__(population, fitness_list)
+            print("Fitness after: " + str(fitness_list))
 
             '''create next gen'''
             if generation != NGEN:
