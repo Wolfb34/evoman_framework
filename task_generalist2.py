@@ -29,8 +29,7 @@ class Generalist2:
 
         self.env = Environment(experiment_name=self.experiment_name, level=2,
                                player_controller=player_controller(N_HIDDEN_NEURONS),
-                               multiplemode="yes",
-                               enemies=enemies,
+                               enemies=enemies[0],
                                speed="fastest")
 
         self.n_vars = (self.env.get_num_sensors() + 1) * N_HIDDEN_NEURONS + (N_HIDDEN_NEURONS + 1) * 5
@@ -39,16 +38,47 @@ class Generalist2:
         self.rot = np.random.uniform(-np.pi, np.pi, (NPOP, self.rot_size))
 
         self.init = Initialization(DOM_L, DOM_U)
-        self.evaluator = Evaluation(self.env, SHARE_SIZE)
+        self.evaluator = Evaluation(self.env, enemies, SHARE_SIZE)
         self.selector = Selection()
         self.logger = Logger(self.experiment_name)
         self.recombinator = Recombination()
         self.mutator = Mutation(MIN_DEV, ROTATION_MUTATION, STANDARD_DEVIATION, DOM_L, DOM_U)
 
+    def __compare_to_ultimate__(self, individual_gain, champion):
+        ultimate_performance_file = open("Logs/Task1/UltimateChampion/UltimatePerformance.txt", "r+")
+
+        ultimate_performance = float(ultimate_performance_file.read())
+        if individual_gain > ultimate_performance:
+            ultimate_file = open("Logs/Task1/UltimateChampion/UltimateChampion.txt", "w")
+            ultimate_file.write(np.array_str(champion))
+
+            ultimate_performance_file.seek(0)
+            ultimate_performance_file.truncate()
+            ultimate_performance_file.write(str(individual_gain))
+
+
     def __run_best_against_all__(self):
-        self.env.update_parameter('enemies', range(1, 9))
-        fitness, player_life, enemy_life, game_run_time = self.env.play(pcont=np.array(self.best_individual[0]))
-        return sum(player_life) - sum(enemy_life)
+        player_array, enemy_array = [], []
+        for i in range(1, 9):
+            self.env.update_parameter('enemies', [i])
+            fitness, player_life, enemy_life, game_run_time = self.env.play(pcont=np.array(self.best_individual[0]))
+            player_array.append(player_life)
+            enemy_array.append(enemy_life)
+        return sum(player_array) - sum(enemy_array)
+
+    def __share_of__(self, ind1, ind2):
+        dist = np.linalg.norm(ind1 - ind2)
+        if dist > SHARE_SIZE:
+            return 0
+        return 1 - dist / SHARE_SIZE
+
+    def __share_fitness__(self, pop, fitness):
+        new_fitness = []
+        length = len(pop)
+        for i in range(length):
+            divisor = sum([self.__share_of__(pop[i], pop[j]) for j in range(length)])
+            new_fitness.append(fitness[i] / divisor)
+        return np.array(new_fitness)
 
     def store_best_champion(self, pop, fit, gen):
         if fit.max() > self.highest_fitness:
@@ -70,7 +100,14 @@ class Generalist2:
 
             '''Log fitness'''
             self.logger.log_results(fitness_list, population)
-            self.store_best_champion(population, fitness_list,generation)
+            self.store_best_champion(population, fitness_list, generation)
+            min_fitness = np.amin(fitness_list)
+            print("Fitness before normalization:\n" + str(fitness_list))
+            if min_fitness < 0:
+                fitness_list = [x - min_fitness for x in fitness_list]
+                print("Fitness after normalization:\n" + str(fitness_list))
+            fitness_list = self.__share_fitness__(population, fitness_list)
+            print("Fitness after sharing:\n" + str(fitness_list))
 
             '''create next gen'''
             if generation != NGEN:
@@ -94,6 +131,7 @@ class Generalist2:
             individual_gain.append(self.__run_best_against_all__())
 
         average_ig = sum(individual_gain)/len(individual_gain)
+        self.__compare_to_ultimate__(average_ig, self.best_individual[0])
         self.logger.log_individual(average_ig)
 
 
