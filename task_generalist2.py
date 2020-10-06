@@ -106,12 +106,9 @@ class Generalist2:
             self.logger.log_results(fitness_list, population)
             self.store_best_champion(population, fitness_list, generation)
             min_fitness = np.amin(fitness_list)
-            print("Fitness before normalization:\n" + str(fitness_list))
             if min_fitness < 0:
                 fitness_list = [x - min_fitness for x in fitness_list]
-                print("Fitness after normalization:\n" + str(fitness_list))
             fitness_list = self.__share_fitness__(population, fitness_list)
-            print("Fitness after sharing:\n" + str(fitness_list))
 
             '''create next gen'''
             if generation != NGEN:
