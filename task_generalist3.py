@@ -45,27 +45,31 @@ class Generalist3:
         self.recombinator = Recombination()
         self.mutator = Mutation(MIN_DEV, ROTATION_MUTATION, STANDARD_DEVIATION, DOM_L, DOM_U)
 
-    def __compare_to_ultimate__(self, individual_gain, champion):
+    def __compare_to_ultimate__(self, individual_gain, wins, champion):
         ultimate_performance_file = open("Logs/Task1/UltimateChampion/UltimatePerformance.txt", "r+")
+        ultimate_performance, ultimate_wins = eval(ultimate_performance_file.read())
 
-        ultimate_performance = float(ultimate_performance_file.read())
-        if individual_gain > ultimate_performance:
+        #declare new ultimate champion if either has more wins or same amount of wins and greater performance
+        if wins >= ultimate_wins and ((wins > ultimate_wins) or (individual_gain > ultimate_performance)):
             ultimate_file = open("Logs/Task1/UltimateChampion/UltimateChampion.txt", "w")
             ultimate_file.write(np.array_str(champion))
 
             ultimate_performance_file.seek(0)
             ultimate_performance_file.truncate()
-            ultimate_performance_file.write(str(individual_gain))
+            ultimate_performance_file.write("".join(map(str, (individual_gain,", ", wins))))
 
 
     def __run_best_against_all__(self):
         player_array, enemy_array = [], []
+        wins = 0
         for i in range(1, 9):
             self.env.update_parameter('enemies', [i])
             _, player_life, enemy_life, _ = self.env.play(pcont=np.array(self.best_individual[0]))
             player_array.append(player_life)
             enemy_array.append(enemy_life)
-        return sum(player_array) - sum(enemy_array)
+            if enemy_life == 0:
+                wins += 1
+        return (sum(player_array) - sum(enemy_array)), wins
 
     def __stepwise_adaption_of_weights__(self, saw):
         fitness_array = np.zeros(8)
@@ -138,15 +142,21 @@ class Generalist3:
 
             '''every 10 generations check champion against ultimate'''
             if generation % 10 == 0:
-                print("The best fitness was in generation %d and had a fitness of %.3f" %(self.best_gen, self.highest_fitness))
-                individual_gain = []
+                print("The best fitness was in generation %d and had a fitness of %.3f" % (
+                self.best_gen, self.highest_fitness))
+
+                total_individual_gain = 0
+                total_wins = 0
                 for i in range(5):
                     print("CHAMPION OF GENERATION %d, RUN %d OF %d \n" %(generation, (i+1), 5))
-                    individual_gain.append(self.__run_best_against_all__())
+                    individual_gain, wins = self.__run_best_against_all__()
+                    total_individual_gain += individual_gain
+                    total_wins += wins
 
-                average_ig = sum(individual_gain) / len(individual_gain)
+                average_ig = total_individual_gain / 5
+                average_wins = total_wins / 5
                 print("CHAMPION OF GENERATION %d, IG: %d\n" %(generation, average_ig))
-                self.__compare_to_ultimate__(average_ig, self.best_individual[0])
+                self.__compare_to_ultimate__(average_ig, average_wins, self.best_individual[0])
                 self.logger.log_individual(average_ig)
 
             '''create next gen'''
