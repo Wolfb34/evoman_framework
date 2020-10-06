@@ -32,7 +32,7 @@ class Evaluation:
 
         return fitness_results
 
-    def sharing_generalist_eval(self, pop):
+    def sharing_generalist_eval(self, pop, saw=None):
         length = pop.shape[0]
         fitness_results = np.empty(length)
         for i in range(length):
@@ -42,6 +42,11 @@ class Evaluation:
             for enemy in self.enemies:
                 self.env.update_parameter('enemies', [enemy])
                 fitness, _, _, _ = self.env.play(pcont=pop[i])
+
+                #perform SAW multiplication
+                if saw is not None:
+                    fitness = fitness * saw[enemy-1]
+
                 fitness_individual += fitness
 
             fitness_results[i] = np.sum(fitness_individual)
