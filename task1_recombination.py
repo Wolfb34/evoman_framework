@@ -74,8 +74,6 @@ class Recombination:
             low = [self.__limit__(x) for x in low]
             high = [self.__limit__(x) for x in high]
 
-            #print(low)
-            #print(high)
             child1 = np.random.uniform(low, high)
             next_gen[i] = child1
             if i + 1 < npop:
