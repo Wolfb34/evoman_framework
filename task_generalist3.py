@@ -22,10 +22,14 @@ class Generalist3:
 
     def __init__(self,  enemies):
         self.enemies = enemies
-        self.experiment_name = 'task2_generalist3_enemies_{}'.format(enemies)
 
-        if not os.path.exists(self.experiment_name):
-            os.makedirs(self.experiment_name)
+        experiment_num = 0
+        while True:
+            self.experiment_name = 'task2_generalist3_enemies_{}_{}'.format(enemies, experiment_num)
+            if not os.path.exists(self.experiment_name):
+                break
+            experiment_num += 1
+        os.makedirs(self.experiment_name)
 
         self.env = Environment(experiment_name=self.experiment_name, level=2,
                                player_controller=player_controller(N_HIDDEN_NEURONS),
