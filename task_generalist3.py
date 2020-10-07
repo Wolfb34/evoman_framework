@@ -82,9 +82,9 @@ class Generalist3:
         max_index = 7
         min_index = 0
         while max_index != min_index:
-            if saw[fitness_indices[max_index]] <= 0.1:
+            if saw[fitness_indices[max_index]] <= 0.11:
                 max_index -= 1
-            elif saw[fitness_indices[min_index]] >= 1.9:
+            elif saw[fitness_indices[min_index]] >= 1.89:
                 min_index += 1
             else:
                 saw[fitness_indices[max_index]] -= 0.1
